@@ -1,7 +1,8 @@
 interface BlogInterface {
-    id: number;
-    title: string;
-    smallDescription: string;
-    slug: string;
-    view: number;    
+  id: number;
+  title: string;
+  smallDescription: string;
+  slug: string;
+  content: string;
+  photo: string;
 }

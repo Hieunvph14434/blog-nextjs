@@ -49,9 +49,9 @@ function BlogArticle({ params }: BlogArticleProps) {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="text-center">
-        <p className="text-sm font-medium text-primary uppercase tracking-wide">
+        {/* <p className="text-sm font-medium text-primary uppercase tracking-wide">
           Jan Marshal - Blog
-        </p>
+        </p> */}
         <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
           {post.title}
         </h1>

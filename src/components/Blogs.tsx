@@ -28,9 +28,10 @@ function Blogs() {
         {data?.map((blog, idx) => (
           <Card key={blog.id || idx} className="p-4">
             <Image
-              src={
-                'https://media.istockphoto.com/id/1354066936/photo/teito-in-veigas-village-somiedo-natural-park-and-biosphere-reserve-asturias-spain.jpg?s=612x612&w=0&k=20&c=CZGKx6vfYbdjNBg89HNFbe4THg5qqMf3NIzZCuHKFv8='
-              }
+              // src={
+              //   'https://media.istockphoto.com/id/1354066936/photo/teito-in-veigas-village-somiedo-natural-park-and-biosphere-reserve-asturias-spain.jpg?s=612x612&w=0&k=20&c=CZGKx6vfYbdjNBg89HNFbe4THg5qqMf3NIzZCuHKFv8='
+              // }
+              src={blog.photo}
               alt="image"
               width={500}
               height={500}
@@ -38,9 +39,13 @@ function Blogs() {
             />
             <CardContent className="mt-5">
               <h3 className="text-lg line-clamp-2 font-bold">{blog.title}</h3>
-              <p className="line-clamp-3 text-sm mt-2 text-gray-600 dark:text-gray-300">
-                {blog.smallDescription}
-              </p>
+              {/* <p className="line-clamp-3 text-sm mt-2 text-gray-600 dark:text-gray-300"> */}
+              {/* {blog.smallDescription} */}
+              <div
+                className="prose prose-sm text-muted-foreground line-clamp-3 text-sm mt-2 text-gray-600 dark:text-gray-300"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
+              {/* </p> */}
               <Button asChild className="w-full mt-7">
                 <Link href={`/blog/${blog.slug}`} className="text-white">
                   Read More

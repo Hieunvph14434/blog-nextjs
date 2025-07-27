@@ -68,8 +68,6 @@ export default function BlogForm({
         slug: gSlug(values.title),
       }),
     });
-    console.log(values);
-    console.log('res', res);
 
     setOpen(false);
   }

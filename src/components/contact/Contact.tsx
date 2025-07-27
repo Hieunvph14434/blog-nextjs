@@ -3,26 +3,64 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 
+// 1. Define schema
+const contactFormSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Invalid email address.' }),
+  message: z
+    .string()
+    .min(10, { message: 'Message must be at least 10 characters.' }),
+});
+
+type ContactFormValues = z.infer<typeof contactFormSchema>;
+
 function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('');
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  // 2. useForm with zod resolver
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      message: '',
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // 3. Submit handler
+  const onSubmit = async (data: ContactFormValues) => {
     setStatus('Sending...');
+    try {
+      const res = await fetch('http://localhost:3001/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+        }),
+      });
 
-    await new Promise((r) => setTimeout(r, 1000)); // mock delay
+      if (!res.ok) {
+        throw new Error('Failed to send message');
+      }
 
-    setStatus('✅ Message sent!');
-    setForm({ name: '', email: '', message: '' });
+      setStatus('Message sent!');
+      reset();
+    } catch (error) {
+      console.error('Error sending contact message:', error);
+      setStatus('Failed to send message. Please try again.');
+    }
   };
 
   return (
@@ -50,18 +88,15 @@ function Contact() {
             <p>Location: Ho Chi Minh City, Vietnam</p>
           </div>
         </div>
+
         <div className="bg-card border rounded-xl p-8 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Your name"
-                required
-              />
+              <Input id="name" placeholder="Your name" {...register('name')} />
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -69,25 +104,25 @@ function Contact() {
               <Input
                 id="email"
                 type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
                 placeholder="you@example.com"
-                required
+                {...register('email')}
               />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
               <Textarea
                 id="message"
-                name="message"
-                value={form.message}
-                onChange={handleChange}
                 placeholder="Write your message here..."
                 rows={5}
-                required
+                {...register('message')}
               />
+              {errors.message && (
+                <p className="text-sm text-red-500">{errors.message.message}</p>
+              )}
             </div>
 
             <Button type="submit" className="w-full text-white">
