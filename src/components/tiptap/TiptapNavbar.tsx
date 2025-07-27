@@ -9,6 +9,8 @@ import { Editor } from '@tiptap/react';
 import { LinkPopover } from '@/components/tiptap-ui/link-popover';
 import { TextAlignButton } from '@/components/tiptap-ui/text-align-button';
 import { ImageUploadButton } from '../tiptap-ui/image-upload-button';
+import TextColorPopover from '../tiptap-custom/text-color-popover';
+import YoutubePopover from '../tiptap-custom/youtube-popover';
 
 export default function TiptapNavbar({ editor }: { editor: Editor | null }) {
   if (!editor) return null;
@@ -36,6 +38,7 @@ export default function TiptapNavbar({ editor }: { editor: Editor | null }) {
           <MarkButton type="code" />
           <MarkButton type="underline" />
           <ColorHighlightPopover />
+          <TextColorPopover editor={editor} />
           <LinkPopover />
         </div>
         <div className="flex border-r border-solid border-slate-200 dark:border-slate-600 ">
@@ -50,6 +53,7 @@ export default function TiptapNavbar({ editor }: { editor: Editor | null }) {
         </div>
         <div className="flex border-r border-solid border-slate-200 dark:border-slate-600 ">
           <ImageUploadButton />
+          <YoutubePopover editor={editor} />
         </div>
       </div>
     </div>

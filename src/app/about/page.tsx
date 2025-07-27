@@ -1,6 +1,28 @@
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Metadata } from 'next';
 import React from 'react';
+
+export const metadata: Metadata = {
+  title: 'About | Next.js Blog Project',
+  description:
+    'Learn more about this project built with Next.js, TypeScript, Tailwind CSS, and more.',
+  keywords: ['Next.js', 'React', 'Tailwind', 'shadcn', 'TypeScript'],
+  openGraph: {
+    title: 'About | Next.js Blog Project',
+    description:
+      'Discover the tech stack and philosophy behind this Next.js-powered blog project.',
+    url: 'http://localhost:3000/about',
+    type: 'website',
+    images: [
+      {
+        url: '/vercel.svg',
+        width: 800,
+        height: 600,
+        alt: 'About Page Thumbnail',
+      },
+    ],
+  },
+};
 
 function About() {
   return (

@@ -15,10 +15,23 @@ import { TaskItem, TaskList } from '@tiptap/extension-list';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import Image from '@tiptap/extension-image';
+import { TextStyle, Color } from '@tiptap/extension-text-style';
 import { ImageUploadNode } from '../tiptap-node/image-upload-node';
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils';
 
-export default function TiptapEditor() {
+interface TiptapEditorProps {
+  value: string;
+  onChange: (value: string) => void;
+  maxHeight?: string;
+  editable?: boolean;
+}
+
+export default function TiptapEditor({
+  value,
+  onChange,
+  maxHeight,
+  editable = true,
+}: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -41,6 +54,8 @@ export default function TiptapEditor() {
         upload: handleImageUpload,
         onError: (error) => console.error('Upload failed:', error),
       }),
+      TextStyle,
+      Color,
       Youtube.configure({
         controls: false,
         nocookie: true,
@@ -52,7 +67,15 @@ export default function TiptapEditor() {
       }),
     ],
     immediatelyRender: false,
-    content: '<p>Write your content here...</p>',
+    // content: '<p>Write your content here...</p>',
+    content: value,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      // onChange(html);
+      requestAnimationFrame(() => {
+        onChange(html);
+      });
+    },
     editorProps: {
       attributes: {
         class: 'min-h-[200px] border rounded-md bg-transparent py-2 px-3',
@@ -60,12 +83,18 @@ export default function TiptapEditor() {
     },
   });
 
+  if (editor) editor.setEditable(editable);
+
   return (
     <div className="tiptap-editor">
       <EditorContext.Provider value={{ editor }}>
-        <TiptapNavbar editor={editor} />
+        {editable && <TiptapNavbar editor={editor} />}
         {/* Add your Tiptap editor component here */}
-        <div className="max-h-[200px] overflow-y-auto bg-white dark:bg-gray-800 rounded-lg">
+        <div
+          className={`${
+            maxHeight || 'max-h-[200px]'
+          } overflow-y-auto bg-white dark:bg-gray-800`}
+        >
           <EditorContent editor={editor} />
         </div>
       </EditorContext.Provider>
