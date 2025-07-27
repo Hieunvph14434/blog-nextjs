@@ -52,7 +52,7 @@ function BlogArticle({ params }: BlogArticleProps) {
         {/* <p className="text-sm font-medium text-primary uppercase tracking-wide">
           Jan Marshal - Blog
         </p> */}
-        <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+        <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
           {post.title}
         </h1>
       </div>
